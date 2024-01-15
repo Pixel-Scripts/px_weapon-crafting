@@ -12,4 +12,8 @@ Simple weapon crafting system with XP system and job control<br><br>
 - Weapon: A set of definitions for different weapons in the game, each with details such as weapon code, name, job requirements, required experience, an allowed job list, and items required for crafting. For example, the sniper rifle requires the police job, 10 experience points, and 2 iron and 5 copper for crafting<br>
 - PositionCrafting: A list of locations in the game where you can craft, defined by coordinates and direction<br>
 
-
+**🧷 Discord**
+[Pixel Scripts](https://discord.gg/KeZSH27fGe)
+<br>
+**💻 Preview**
+[Video](https://www.youtube.com/watch?v=qLC1rGdf22g)
