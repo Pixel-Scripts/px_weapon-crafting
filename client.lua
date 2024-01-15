@@ -16,7 +16,7 @@ local cam
 local inCam
 local objectPosition = {}
 
-exports.ox_target:addModel("gr_prop_gr_bench_02b", {
+exports.ox_target:addModel(Crafting.PropBench, {
     {
         name = 'open_crafting',
         event = '',
@@ -25,7 +25,6 @@ exports.ox_target:addModel("gr_prop_gr_bench_02b", {
         onSelect = function(entity, distance, coords, name)
             local coords = GetEntityCoords(entity.entity)
             CamON(entity.entity, coords, GetEntityHeading(entity.entity))
-            FreezeEntityPosition(cache.ped, true)
         end
     }
 })
@@ -41,7 +40,7 @@ end)
 function SpawnObject()
     for _, v in ipairs(Crafting.PositionCrafting) do
         local heading = 0.0 + v.heading
-        local createCrafting = CreateObject("gr_prop_gr_bench_02b", v.coords.x, v.coords.y, v.coords.z, false, true, false)
+        local createCrafting = CreateObject(Crafting.PropBench, v.coords.x, v.coords.y, v.coords.z, false, true, false)
 
         if createCrafting then
             SetEntityHeading(createCrafting, heading)
@@ -130,7 +129,14 @@ function OpenCrafting(coords, heading)
         end)
         lib.showMenu('ApriCrafting')
     elseif not value then
-        Wait(1000)
+        debug('You cannot craft weapons')
+        lib.notify({
+            title = lang.notify_cannot_craft,
+            description = '',
+            type = 'error',
+            position = 'top-center'
+        })
+        Wait(500)
         CamOFF()
     end
 end
@@ -213,22 +219,37 @@ function OpenMenuCraft(hash, value)
         if k == value then
             weaponName = v.weaponCode
             xp = v.requiredXp
-            options[#options + 1] = {
-                label = lang.menu3_options_3.." "..xp,
-                close = false,
-                icon = "fa-solid fa-arrow-up-wide-short"
-            }
-            for j, l in pairs(v.ItemRequired) do
-                debug("Item Name: " .. l.itemName .. " Item Quantity: " .. l.quantity)
-                craftingInfo[#craftingInfo + 1] = {
-                    itemName = l.itemName,
-                    quantity = l.quantity,
-                }
+            if Crafting.XpSystem then
                 options[#options + 1] = {
-                    label = lang.menu3_options_1.. l.itemName .. " x " .. l.quantity,
+                    label = lang.menu3_options_3.." "..xp,
                     close = false,
-                    icon = "fa-solid fa-clipboard"
+                    icon = "fa-solid fa-arrow-up-wide-short"
                 }
+                for j, l in pairs(v.ItemRequired) do
+                    debug("Item Name: " .. l.itemName .. " Item Quantity: " .. l.quantity)
+                    craftingInfo[#craftingInfo + 1] = {
+                        itemName = l.itemName,
+                        quantity = l.quantity,
+                    }
+                    options[#options + 1] = {
+                        label = lang.menu3_options_1.. l.label .. " x " .. l.quantity,
+                        close = false,
+                        icon = "fa-solid fa-clipboard"
+                    }
+                end
+            else
+                for j, l in pairs(v.ItemRequired) do
+                    debug("Item Name: " .. l.itemName .. " Item Quantity: " .. l.quantity)
+                    craftingInfo[#craftingInfo + 1] = {
+                        itemName = l.itemName,
+                        quantity = l.quantity,
+                    }
+                    options[#options + 1] = {
+                        label = lang.menu3_options_1.. l.label .. " x " .. l.quantity,
+                        close = false,
+                        icon = "fa-solid fa-clipboard"
+                    }
+                end
             end
         end
     end
@@ -343,6 +364,7 @@ function CamON(obj, coordsArma, heading)
     local coords = GetOffsetFromEntityInWorldCoords(obj, 0, -0.75, 0)
     RenderScriptCams(false, false, 0, 1, 0)
     DestroyCam(cam, false)
+    FreezeEntityPosition(cache.ped, true)
 
     if not DoesCamExist(cam) then
         cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
@@ -396,13 +418,36 @@ function InfoCrafting()
     DrawScaleformMovieFullscreen(Scale, 255, 255, 255, 255, 0);
 end
 
+function InfoPlaceCrafting()
+    Scale = RequestScaleformMovie("INSTRUCTIONAL_BUTTONS");
+    while not HasScaleformMovieLoaded(Scale) do
+        Citizen.Wait(0)
+    end
+
+    BeginScaleformMovieMethod(Scale, "CLEAR_ALL");
+    EndScaleformMovieMethod();
+
+    --Destra
+    BeginScaleformMovieMethod(Scale, "SET_DATA_SLOT");
+    ScaleformMovieMethodAddParamInt(0);
+    PushScaleformMovieMethodParameterString("~INPUT_PICKUP~");
+    PushScaleformMovieMethodParameterString("Place Prop");
+    EndScaleformMovieMethod();
+
+    BeginScaleformMovieMethod(Scale, "DRAW_INSTRUCTIONAL_BUTTONS");
+    ScaleformMovieMethodAddParamInt(0);
+    EndScaleformMovieMethod();
+
+    DrawScaleformMovieFullscreen(Scale, 255, 255, 255, 255, 0);
+end
+
 function CamOFF()
-    lib.hideMenu('ApriCrafting')
-    FreezeEntityPosition(cache.ped, false)
+    -- lib.hideMenu('ApriCrafting')
+    FreezeEntityPosition(PlayerPedId(), false)
     DeleteObject(obj)
     RenderScriptCams(false, true, 250, 1, 0)
     DestroyCam(cam, false)
-    SetLocalPlayerAsGhost(false)
+    -- SetLocalPlayerAsGhost(false)
     inCam = false
 end
 
@@ -476,6 +521,7 @@ local function placeProp(prop)
 
     CreateThread(function()
         while not confirmed do
+            InfoPlaceCrafting()
             hit, coords, entity = RayCastGamePlayCamera(10.0)
             DisableControlAction(0, 24, true)
             DisableControlAction(0, 25, true)
@@ -521,6 +567,6 @@ local function placeProp(prop)
     end)
 end
 
-RegisterCommand("createCrafting", function()
-    placeProp('gr_prop_gr_bench_02b')
+RegisterCommand(Crafting.Command, function()
+    placeProp(Crafting.PropBench)
 end)
