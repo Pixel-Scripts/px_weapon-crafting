@@ -249,9 +249,9 @@ function OpenMenuCraft(hash, value)
         end,
     }, function(selected, scrollIndex, args)
         local totalOptions = #options
-        local item = args.craftingInfo
-        local data = lib.callback.await('px_crafting:getItemCount', false, args.craftingInfo)
         if selected == totalOptions then
+            local data = lib.callback.await('px_crafting:getItemCount', false, args.craftingInfo)
+            local item = args.craftingInfo
             debug('Start check item and xp...')
             debug(data)
             if data.value then
