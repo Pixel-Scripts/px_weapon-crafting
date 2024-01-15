@@ -1,21 +1,23 @@
 Crafting = {}
 
 Crafting = {
-    EnableDebug = false,
+    Command = 'createCrafting',
+    PropBench = 'gr_prop_gr_bench_02b',
+    EnableDebug = true,
     XpSystem = false,
     ExperiancePerCraft = 2.5,
     Weapon = {
-        ["w_sr_sniperrifle"] = {
-            weaponCode = 'WEAPON_SNIPERRIFLE',
-            weaponName = 'Sniper Rifle',
-            requiredJob = true,
+        ["w_pi_pistol_mk2"] = {
+            weaponCode = 'WEAPON_PISTOL_MK2',
+            weaponName = 'Pistol MK2',
+            requiredJob = false,
             requiredXp = 10,
             allowlistJob = {
                 "police"
             },
             ItemRequired = {
-                { itemName = "phone", quantity = 2},
-                { itemName = "burger", quantity = 5}
+                {label = 'Phone', itemName = "phone", quantity = 2},
+                {label = 'Burger', itemName = "burger", quantity = 5}
             }
         },
         ["w_pi_pistol"] = {
@@ -27,7 +29,7 @@ Crafting = {
                 "police"
             },
             ItemRequired = {
-                { itemName = "radio", quantity = 1}
+                {label = 'Radio', itemName = "radio", quantity = 1}
             }
         },
         ["w_ar_carbinerifle"] = {
@@ -36,10 +38,10 @@ Crafting = {
             requiredJob = true,
             requiredXp = 1,
             allowlistJob = {
-                "ambulance",
+                "police",
             },
             ItemRequired = {
-                { itemName = "water", quantity = 1}
+                {label = 'Water', itemName = "water", quantity = 1}
             }
         }
     },
