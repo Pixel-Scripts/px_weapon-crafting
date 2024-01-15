@@ -17,3 +17,6 @@ Simple weapon crafting system with XP system and job control<br><br>
 <br>
 **💻 Preview**
 [Video](https://www.youtube.com/watch?v=qLC1rGdf22g)
+
+**📖 Documentation**
+[View](https://app.gitbook.com/o/maLkzzf71CV0QY3XJcJC/s/ryJXOX2xIE06Mha4iYtD/~/changes/18/)
