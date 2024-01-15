@@ -8,7 +8,7 @@ lang = {
     menu3_title = 'Weapon Information Menu',
     menu3_options_1 = 'Name: ',
     menu3_options_2 = 'Build',
-    menu3_options_3 = 'Required XP',
+    menu3_options_3 = 'Required XP: ',
 
     menu4_title = 'Weapon Information Menu',
     menu4_options_1 = 'Damage',
@@ -20,5 +20,6 @@ lang = {
     --Notifications
     notify_enough_xp = 'You do not have enough experience',
     notify_copy_coords = 'You have copied the coordinates',
-    notify_earned_xp = 'You have earned '
+    notify_earned_xp = 'You have earned ',
+    notify_cannot_craft = 'You cannot craft weapons'
 }
