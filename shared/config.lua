@@ -3,15 +3,17 @@ Crafting = {}
 Crafting = {
     Command = 'createCrafting',
     PropBench = 'gr_prop_gr_bench_02b',
-    EnableDebug = true,
+    EnableDebug = false,
     XpSystem = false,
     ExperiancePerCraft = 2.5,
     Weapon = {
-        ["w_pi_pistol_mk2"] = {
-            weaponCode = 'WEAPON_PISTOL_MK2',
-            weaponName = 'Pistol MK2',
+        ["prop_ld_ammo_pack_01"] = {
+            itemCode = 'ammo-9',
+            itemName = 'Ammo 9mm',
             requiredJob = false,
             requiredXp = 10,
+            requiredTime = 1000,
+            weapon = false,
             allowlistJob = {
                 "police"
             },
@@ -21,10 +23,12 @@ Crafting = {
             }
         },
         ["w_pi_pistol"] = {
-            weaponCode = 'WEAPON_PISTOL',
-            weaponName = 'Pistol',
-            requiredJob = true,
+            itemCode = 'WEAPON_PISTOL',
+            itemName = 'Pistol',
+            requiredJob = false,
             requiredXp = 0,
+            requiredTime = 2000,
+            weapon = true,
             allowlistJob = {
                 "police"
             },
@@ -33,10 +37,12 @@ Crafting = {
             }
         },
         ["w_ar_carbinerifle"] = {
-            weaponCode = 'WEAPON_CARBINERIFLE',
-            weaponName = 'Carabine Rifle',
-            requiredJob = true,
+            itemCode = 'WEAPON_CARBINERIFLE',
+            itemName = 'Carabine Rifle',
+            requiredJob = false,
             requiredXp = 1,
+            requiredTime = 10000,
+            weapon = true,
             allowlistJob = {
                 "police",
             },
@@ -44,9 +50,5 @@ Crafting = {
                 {label = 'Water', itemName = "water", quantity = 1}
             }
         }
-    },
-
-    PositionCrafting = {
-        {coords = vector3(-16.471076965332, 4.4761486053467, 70.613090515137), heading =165.0}
     }
 }
