@@ -44,6 +44,32 @@ AddEventHandler('px_crafting:removeItem', function(item, weapon)
     end
 end)
 
+RegisterNetEvent('px_crafting:SaveTable')
+AddEventHandler('px_crafting:SaveTable', function(name, coordsx, coordsy, coordsz, heading)
+    local loadFile= LoadResourceFile(GetCurrentResourceName(), "./positionTable.json")
+    if loadFile ~= nil then
+        local extract = json.decode(loadFile)
+        if type(extract) == "table" then
+            debug(extract)
+            table.insert(extract, {name = name, coords = vector3(coordsx, coordsy, coordsz), heading = heading})
+            SaveResourceFile(GetCurrentResourceName(), "positionTable.json",  json.encode(extract, { indent = true }), -1)
+        else
+            local Table = {}
+            table.insert(Table, {name = name, coords = vector3(coordsx, coordsy, coordsz), heading = heading})
+            SaveResourceFile(GetCurrentResourceName(), "positionTable.json",  json.encode(Table, { indent = true }), -1)
+        end
+    end
+end)
+
+
+lib.callback.register('px_crafting:getTablePosition', function(source)
+    local loadFile= LoadResourceFile(GetCurrentResourceName(), "./positionTable.json")
+    if loadFile ~= nil then
+        local extract = json.decode(loadFile)
+        return extract
+    end
+end)
+
 RegisterCommand("givecraftingxp", function(source, args, rawCommand)
     local xTarget = ESX.GetPlayerFromId(tonumber(args[1]))
     if args[1] ~= nil then
