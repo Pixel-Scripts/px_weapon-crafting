@@ -2,6 +2,7 @@ Crafting = {}
 
 Crafting = {
     Command = 'createCrafting',
+    PermissionCommand = {'admin'},
     PropBench = 'gr_prop_gr_bench_02b',
     EnableDebug = false,
     XpSystem = false,
