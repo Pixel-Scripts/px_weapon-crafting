@@ -1,10 +1,10 @@
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
-	ESX.PlayerData = xPlayer
+    ESX.PlayerData = xPlayer
 end)
 
 RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function (job)
+AddEventHandler('esx:setJob', function(job)
     ESX.PlayerData.job = job
 end)
 
@@ -42,7 +42,8 @@ function SpawnObject()
     if data ~= nil then
         for _, v in ipairs(data) do
             local heading = 0.0 + v.heading
-            local createCrafting = CreateObject(Crafting.PropBench, v.coords.x, v.coords.y, v.coords.z, false, true, false)
+            local createCrafting = CreateObject(Crafting.PropBench, v.coords.x, v.coords.y, v.coords.z, false, true,
+                false)
 
             if createCrafting then
                 SetEntityHeading(createCrafting, heading)
@@ -144,7 +145,6 @@ function OpenCrafting(coords, heading)
     end
 end
 
-
 local function GetIntFromBlob(b, s, o)
     local r = 0
     for i = 1, s, 1 do
@@ -192,18 +192,18 @@ end
 
 function OpenMenuWeapon(hash, value)
     local options = {}
-    debug("Code "..hash)
-    for k,v in pairs(Crafting.Weapon) do
+    debug("Code " .. hash)
+    for k, v in pairs(Crafting.Weapon) do
         -- debug(v)
         if v.itemCode == hash then
             if v.weapon then
                 options = {
-                    {label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer"},
-                    {label = lang.menu2_options_2, close = true, icon = "fa-solid fa-circle-info"}
+                    { label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer" },
+                    { label = lang.menu2_options_2, close = true, icon = "fa-solid fa-circle-info" }
                 }
             else
                 options = {
-                    {label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer"}
+                    { label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer" }
                 }
             end
         end
@@ -238,7 +238,7 @@ function OpenMenuCraft(hash, value)
             time = v.requiredTime
             if Crafting.XpSystem then
                 options[#options + 1] = {
-                    label = lang.menu3_options_3.." "..xp,
+                    label = lang.menu3_options_3 .. " " .. xp,
                     close = false,
                     icon = "fa-solid fa-arrow-up-wide-short"
                 }
@@ -249,7 +249,7 @@ function OpenMenuCraft(hash, value)
                         quantity = l.quantity,
                     }
                     options[#options + 1] = {
-                        label = lang.menu3_options_1.. l.label .. " x " .. l.quantity,
+                        label = lang.menu3_options_1 .. l.label .. " x " .. l.quantity,
                         close = false,
                         icon = "fa-solid fa-clipboard"
                     }
@@ -262,7 +262,7 @@ function OpenMenuCraft(hash, value)
                         quantity = l.quantity,
                     }
                     options[#options + 1] = {
-                        label = lang.menu3_options_1.. l.label .. " x " .. l.quantity,
+                        label = lang.menu3_options_1 .. l.label .. " x " .. l.quantity,
                         close = false,
                         icon = "fa-solid fa-clipboard"
                     }
@@ -309,9 +309,9 @@ function OpenMenuCraft(hash, value)
                                     clip = 'fixing_a_ped'
                                 },
                             }) then
-                                CamOFF()
-                                TriggerServerEvent('px_crafting:removeItem', item, itemName)
-                            end
+                            CamOFF()
+                            TriggerServerEvent('px_crafting:removeItem', item, itemName)
+                        end
                     else
                         debug('You don\'t have enough experience points')
                         lib.notify({
@@ -337,9 +337,9 @@ function OpenMenuCraft(hash, value)
                                 clip = 'fixing_a_ped'
                             },
                         }) then
-                            CamOFF()
-                            TriggerServerEvent('px_crafting:removeItem', item, itemName)
-                        end
+                        CamOFF()
+                        TriggerServerEvent('px_crafting:removeItem', item, itemName)
+                    end
                 end
             else
                 CamOFF()
@@ -349,7 +349,6 @@ function OpenMenuCraft(hash, value)
     lib.showMenu('OpenMenuRealCraft')
 end
 
-
 function OpenMenuInfo(hash, value)
     local job = GetJobPlayer()
     debug("Player Job " .. job)
@@ -357,11 +356,11 @@ function OpenMenuInfo(hash, value)
     local _, hudDamage, hudSpeed, hudCapacity, hudAccuracy, hudRange = GetWeaponStats(GetHashKey(hash))
     debug(_, hudDamage, hudSpeed, hudCapacity, hudAccuracy, hudRange)
     options = {
-        { label = lang.menu4_options_1..' (' .. hudDamage .. '%)',     progress = hudDamage,   colorScheme = '#0061A2', close = false },
-        { label =lang.menu4_options_2..' (' .. hudSpeed .. '%)',       progress = hudSpeed,    colorScheme = '#0061A2', close = false },
-        { label = lang.menu4_options_3..' (' .. hudCapacity .. '%)', progress = hudCapacity, colorScheme = '#0061A2', close = false },
-        { label = lang.menu4_options_4..' (' .. hudAccuracy .. '%)', progress = hudAccuracy, colorScheme = '#0061A2', close = false },
-        { label = lang.menu4_options_5..' (' .. hudRange .. '%)',       progress = hudRange,    colorScheme = '#0061A2', close = false }
+        { label = lang.menu4_options_1 .. ' (' .. hudDamage .. '%)', progress = hudDamage,   colorScheme = '#0061A2', close = false },
+        { label = lang.menu4_options_2 .. ' (' .. hudSpeed .. '%)',  progress = hudSpeed,    colorScheme = '#0061A2', close = false },
+        { label = lang.menu4_options_3 .. ' (' .. hudCapacity .. '%)', progress = hudCapacity, colorScheme = '#0061A2', close = false },
+        { label = lang.menu4_options_4 .. ' (' .. hudAccuracy .. '%)', progress = hudAccuracy, colorScheme = '#0061A2', close = false },
+        { label = lang.menu4_options_5 .. ' (' .. hudRange .. '%)',  progress = hudRange,    colorScheme = '#0061A2', close = false }
     }
     Wait(100)
     lib.registerMenu({
@@ -396,7 +395,6 @@ function CamON(obj, coordsArma, heading)
         CamON()
     end
 end
-
 
 function InfoCrafting()
     Scale = RequestScaleformMovie("INSTRUCTIONAL_BUTTONS");
@@ -532,7 +530,9 @@ function RayCastGamePlayCamera(distance)
     return b, c, e
 end
 
-local function placeProp(prop)
+RegisterNetEvent('px_crafting:placeProp')
+AddEventHandler('px_crafting:placeProp', function(prop)
+    debug('Hola')
     prop = joaat(prop)
     heading = 0.0
     confirmed = false
@@ -585,11 +585,11 @@ local function placeProp(prop)
             SetEntityHeading(propObject, heading)
 
             if IsControlJustPressed(0, 38) then -- "E"
-                local input = lib.inputDialog('Table Name', {''})
- 
-                if not input then 
+                local input = lib.inputDialog('Table Name', { '' })
+
+                if not input then
                     DeleteObject(propObject)
-                    return 
+                    return
                 else
                     confirmed = true
                     SetEntityAlpha(propObject, 255, false)
@@ -600,8 +600,4 @@ local function placeProp(prop)
             end
         end
     end)
-end
-
-RegisterCommand(Crafting.Command, function()
-    placeProp(Crafting.PropBench)
 end)
