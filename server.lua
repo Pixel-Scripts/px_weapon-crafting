@@ -88,3 +88,14 @@ RegisterCommand("givecraftingxp", function(source, args, rawCommand)
         end
     end
 end, false)
+
+RegisterCommand(Crafting.Command, function(source, args, rawCommand)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    for k, v in pairs(Crafting.PermissionCommand) do
+        if v == xPlayer.getGroup() then
+            debug(v)
+            TriggerClientEvent('px_crafting:placeProp', source, Crafting.PropBench)
+            return
+        end
+    end
+end)
