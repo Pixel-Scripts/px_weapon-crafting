@@ -2,10 +2,11 @@ Crafting = {}
 
 Crafting = {
     Command = 'createCrafting',
+    CommandShow = 'showCrafting',
     PermissionCommand = {'admin'},
     PropBench = 'gr_prop_gr_bench_02b',
-    EnableDebug = false,
-    XpSystem = false,
+    EnableDebug = true,
+    XpSystem = true,
     ExperiancePerCraft = 2.5,
     Weapon = {
         ["prop_ld_ammo_pack_01"] = {
