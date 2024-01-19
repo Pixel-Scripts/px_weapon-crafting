@@ -87,7 +87,7 @@ lib.callback.register('px_crafting:getTablePosition', function(source)
     end
 end)
 
-RegisterCommand("givecraftingxp", function(source, args, rawCommand)
+RegisterCommand(Crafting.CommandGive, function(source, args, rawCommand)
     local xTarget = ESX.GetPlayerFromId(tonumber(args[1]))
     if args[1] ~= nil then
         if args[2] ~= nil then
