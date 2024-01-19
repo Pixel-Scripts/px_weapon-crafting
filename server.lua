@@ -38,7 +38,7 @@ AddEventHandler('px_crafting:removeItem', function(item, weapon)
     end
     if Crafting.XpSystem then
         exports.ox_inventory:AddItem(source, weapon, 1, nil, nil)
-        GivePlayerXp(source, Crafting.ExperiancePerCraft)
+        addPlayerXp(source, Crafting.ExperiancePerCraft)
     else
         exports.ox_inventory:AddItem(source, weapon, 1, nil, nil)
     end
@@ -61,6 +61,23 @@ AddEventHandler('px_crafting:SaveTable', function(name, coordsx, coordsy, coords
     end
 end)
 
+RegisterNetEvent('px_weapon_crafting:DeleteEntity')
+AddEventHandler('px_weapon_crafting:DeleteEntity', function(coords, name)
+    local loadFile = LoadResourceFile(GetCurrentResourceName(), "./positionTable.json ")
+    if loadFile ~= nil then
+        local extract = json.decode(loadFile)
+        if type(extract) == "table" then
+            for k,v in ipairs(extract) do
+                if v.name == name then
+                    debug(v.coords)
+                    debug(k)
+                    table.remove(extract, k)
+                    SaveResourceFile(GetCurrentResourceName(), "positionTable.json",  json.encode(extract, { indent = true }), -1)
+                end
+            end
+        end
+    end
+end)
 
 lib.callback.register('px_crafting:getTablePosition', function(source)
     local loadFile= LoadResourceFile(GetCurrentResourceName(), "./positionTable.json")
@@ -75,13 +92,7 @@ RegisterCommand("givecraftingxp", function(source, args, rawCommand)
     if args[1] ~= nil then
         if args[2] ~= nil then
             if xTarget ~= nil then
-                local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `users` WHERE `identifier` = ?', {
-                    xTarget.identifier
-                })
-                local givexp = player_xp + tonumber(args[2])
-                local affectedRows = MySQL.update.await('UPDATE users SET `crafting_level` = ? WHERE identifier = ?', {
-                    givexp, xTarget.identifier
-                })
+                addPlayerXp(xTarget.source, args[2])
             else
                 debug('User not found')
             end
@@ -99,3 +110,35 @@ RegisterCommand(Crafting.Command, function(source, args, rawCommand)
         end
     end
 end)
+
+RegisterCommand(Crafting.CommandShow, function(source, args, rawCommand)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    for k, v in pairs(Crafting.PermissionCommand) do
+        if v == xPlayer.getGroup() then
+            debug(v)
+            TriggerClientEvent('px_crafting:showCrafting', source)
+            return
+        end
+    end
+end)
+
+function addPlayerXp(source, xp)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `users` WHERE `identifier` = ?', {
+        xPlayer.identifier
+    })
+    local givexp = player_xp + tonumber(xp)
+    local affectedRows = MySQL.update.await('UPDATE users SET `crafting_level` = ? WHERE identifier = ?', {
+        givexp, xPlayer.identifier
+    })
+
+    TriggerClientEvent('ox_lib:notify', source, {
+        type = 'success',
+        title = lang.notify_earned_xp.." "..Crafting.ExperiancePerCraft.."xp",
+        position = 'top',
+        description = '',
+        5000
+    })
+end
+
+exports("addPlayerXp", addPlayerXp);
