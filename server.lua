@@ -38,7 +38,7 @@ AddEventHandler('px_crafting:removeItem', function(item, weapon)
     end
     if Crafting.XpSystem then
         exports.ox_inventory:AddItem(source, weapon, 1, nil, nil)
-        addPlayerXp(source, Crafting.ExperiancePerCraft)
+        exports["px_weapon-crafting"]:addPlayerXp(source, Crafting.ExperiancePerCraft)
     else
         exports.ox_inventory:AddItem(source, weapon, 1, nil, nil)
     end
@@ -92,7 +92,7 @@ RegisterCommand("givecraftingxp", function(source, args, rawCommand)
     if args[1] ~= nil then
         if args[2] ~= nil then
             if xTarget ~= nil then
-                addPlayerXp(xTarget.source, args[2])
+                exports["px_weapon-crafting"]:addPlayerXp(xTarget.source, args[2])
             else
                 debug('User not found')
             end
@@ -122,7 +122,7 @@ RegisterCommand(Crafting.CommandShow, function(source, args, rawCommand)
     end
 end)
 
-function addPlayerXp(source, xp)
+exports("addPlayerXp", function(source, xp)
     local xPlayer = ESX.GetPlayerFromId(source)
     local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `users` WHERE `identifier` = ?', {
         xPlayer.identifier
@@ -139,6 +139,4 @@ function addPlayerXp(source, xp)
         description = '',
         5000
     })
-end
-
-exports("addPlayerXp", addPlayerXp);
+end)
