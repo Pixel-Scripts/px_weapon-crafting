@@ -23,19 +23,3 @@ function GetPlayerXp()
     })
     return player_xp
 end
-
-function GivePlayerXp(source, xp)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local getPlayerXp = GetPlayerXp()
-    local total_xp = getPlayerXp + xp
-    local affectedRows = MySQL.update.await('UPDATE users SET `crafting_level` = ? WHERE identifier = ?', {
-        total_xp, xPlayer.identifier
-    })
-    TriggerClientEvent('ox_lib:notify', source, {
-        type = 'success',
-        title = lang.notify_earned_xp.." "..Crafting.ExperiancePerCraft.."xp",
-        position = 'top',
-        description = '',
-        5000
-    })
-end
