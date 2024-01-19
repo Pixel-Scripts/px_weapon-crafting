@@ -3,6 +3,7 @@ Crafting = {}
 Crafting = {
     Command = 'createCrafting',
     CommandShow = 'showCrafting',
+    CommandGive = 'givecraftingxp',
     PermissionCommand = {'admin'},
     PropBench = 'gr_prop_gr_bench_02b',
     EnableDebug = true,
