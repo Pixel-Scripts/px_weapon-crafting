@@ -29,11 +29,87 @@ exports.ox_target:addModel(Crafting.PropBench, {
     }
 })
 
+local view
+
+RegisterNetEvent('px_crafting:showCrafting')
+AddEventHandler('px_crafting:showCrafting', function()
+    ShowAllEntity()
+end)
+
+function ShowAllEntity()
+    local data = lib.callback.await('px_crafting:getTablePosition', false)
+    if type(data) == "table" then
+        local options = {}
+        debug(data)
+        for _, v in pairs(data) do
+            options[#options + 1] = {
+                label = v.name, args = {coords = v.coords, name = v.name}, close = true
+            }
+        end
+        lib.registerMenu({
+            id = 'some_menu_id',
+            title = 'All Bench',
+            position = 'top-right',
+            options = options,
+            onClose = function()
+                view = false
+            end,
+        }, function(selected, scrollIndex, args)
+            local coords = args.coords
+            local name = args.name
+            InfoEntity(coords, name)
+        end)
+        lib.showMenu('some_menu_id')
+    end
+end
+
+function InfoEntity(coords, name)
+    lib.registerMenu({
+        id = 'info_entity',
+        title = 'Menu Actions',
+        position = 'top-right',
+        options = {
+            {label = 'View', args = {coords = coords}, close = false},
+            {label = 'Delete', args = {coords = coords, name = name}, close = true}
+        },
+        onClose = function()
+            ShowAllEntity()
+            view = false
+        end,
+    }, function(selected, scrollIndex, args)
+        local coords = args.coords
+        local name = args.name
+        if selected == 1 then
+            debug('View')
+            view = false
+            Wait(50)
+            view = true
+            CreateMarker(coords)
+        elseif selected == 2 then
+            view = false
+            TriggerServerEvent('px_weapon_crafting:DeleteEntity', coords, name)
+            for _, v in pairs(objectPosition) do
+                debug(v)
+                DeleteEntity(v)
+            end
+            Wait(100)
+            SpawnObject()
+        end
+    end)
+    lib.showMenu('info_entity')
+end
+
+function CreateMarker(coords)
+    while view do
+        Wait(0)
+        DrawMarker(2, coords.x, coords.y, coords.z + 2, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 1.0, 1.0, 1.0, 255, 128, 0, 50, true, true, 2, nil, nil, false)
+    end
+end
+
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then
         return
     end
-
     SpawnObject()
 end)
 
@@ -356,11 +432,11 @@ function OpenMenuInfo(hash, value)
     local _, hudDamage, hudSpeed, hudCapacity, hudAccuracy, hudRange = GetWeaponStats(GetHashKey(hash))
     debug(_, hudDamage, hudSpeed, hudCapacity, hudAccuracy, hudRange)
     options = {
-        { label = lang.menu4_options_1 .. ' (' .. hudDamage .. '%)', progress = hudDamage,   colorScheme = '#0061A2', close = false },
-        { label = lang.menu4_options_2 .. ' (' .. hudSpeed .. '%)',  progress = hudSpeed,    colorScheme = '#0061A2', close = false },
+        { label = lang.menu4_options_1 .. ' (' .. hudDamage .. '%)',   progress = hudDamage,   colorScheme = '#0061A2', close = false },
+        { label = lang.menu4_options_2 .. ' (' .. hudSpeed .. '%)',    progress = hudSpeed,    colorScheme = '#0061A2', close = false },
         { label = lang.menu4_options_3 .. ' (' .. hudCapacity .. '%)', progress = hudCapacity, colorScheme = '#0061A2', close = false },
         { label = lang.menu4_options_4 .. ' (' .. hudAccuracy .. '%)', progress = hudAccuracy, colorScheme = '#0061A2', close = false },
-        { label = lang.menu4_options_5 .. ' (' .. hudRange .. '%)',  progress = hudRange,    colorScheme = '#0061A2', close = false }
+        { label = lang.menu4_options_5 .. ' (' .. hudRange .. '%)',    progress = hudRange,    colorScheme = '#0061A2', close = false }
     }
     Wait(100)
     lib.registerMenu({
